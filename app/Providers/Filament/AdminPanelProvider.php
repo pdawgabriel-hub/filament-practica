@@ -24,8 +24,8 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('dashboard')
+            ->path('dashboard')
             ->login()
             ->colors([
                 'primary' => Color::Amber,
@@ -40,6 +40,7 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
+            ->profile()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
