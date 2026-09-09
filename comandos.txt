@@ -1,4 +1,17 @@
- php artisan make:filament-resource --generate --> Genera de forma automatica el recurso del modelo
-php artisan make:model Category -m --> Crea el modelo con su migracion
+# Comandos útiles de Filament / Laravel — proyecto filament-practica
+
+php artisan make:filament-resource --generate
+# Genera de forma automática el recurso (Resource) de un modelo,
+# infiriendo los campos del formulario/tabla a partir de las columnas de la BD
+
+php artisan make:model Category -m
+# Crea el modelo Category junto con su migración correspondiente (-m)
+
 php artisan make:filament-relation-manager PostResource comments body
-php artisan make:filament-user --> Cada vez que reiniciamos migraciones y bd
+# Crea un RelationManager para gestionar la relación "comments" de PostResource,
+# usando "body" como el atributo que identifica cada registro (recordTitleAttribute)
+
+php artisan make:filament-user
+# Crea un usuario con acceso al panel de Filament
+# Hay que volver a ejecutarlo cada vez que se reinician las migraciones (migrate:fresh),
+# ya que ese comando borra también la tabla de usuarios
