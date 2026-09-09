@@ -1,4 +1,4 @@
-# Filament Practica
+# Practica Filament
 
 Proyecto de aprendizaje construido siguiendo un curso de YouTube sobre **FilamentPHP**. El objetivo no es un producto terminado, sino practicar Filament (panel de administración, Resources, RelationManagers, plugins) antes de abordar la migración de un ERP de gestión de una empresa de obras y reformas a Laravel + Filament.
 
