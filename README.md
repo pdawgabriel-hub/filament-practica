@@ -40,22 +40,41 @@ Qué se practica aquí:
 
 ## Capturas de pantalla
 
-> _[CAPTURA: panel de login de Filament en `/dashboard/login`]_
-![descripción](docs/screenshots/login.png)
+**Panel de administración — pantalla de acceso**
 
-> _[CAPTURA: listado de Posts en el panel — `/dashboard/posts`]_
-![descripción](docs/screenshots/posts_dashboard.png)
+<img src="docs/screenshots/login.png" alt="Login del panel de Filament" width="700">
 
-> _[CAPTURA: RelationManager de comentarios dentro de la edición de un post]_
-![descripción](docs/screenshots/relation_managers.png)
+<br>
 
-> _[CAPTURA: vista pública del listado de noticias en `/`]_
-![descripción](docs/screenshots/listado_publico_posts.png)
+**Panel de administración — gestión de contenido**
 
-> _[CAPTURA: vista pública de un post individual con sus comentarios]_
-![descripción](docs/screenshots/post_publico.png)
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/posts_dashboard.png" alt="Listado de Posts en el panel">
+      <p align="center"><sub>Listado de Posts — <code>/dashboard/posts</code></sub></p>
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/relation_managers.png" alt="RelationManager de comentarios">
+      <p align="center"><sub>Comentarios de un post gestionados desde su RelationManager</sub></p>
+    </td>
+  </tr>
+</table>
 
-*(Sustituye estos marcadores por capturas reales subidas a `docs/screenshots/` y enlázalas con `![descripción](docs/screenshots/archivo.png)`)*
+**Parte pública del sitio**
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/listado_publico_posts.png" alt="Listado público de noticias">
+      <p align="center"><sub>Listado público de noticias — <code>/</code></sub></p>
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/post_publico.png" alt="Vista pública de un post individual">
+      <p align="center"><sub>Post individual con sus comentarios</sub></p>
+    </td>
+  </tr>
+</table>
 
 ---
 
