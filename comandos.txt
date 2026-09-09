@@ -15,3 +15,5 @@ php artisan make:filament-user
 # Crea un usuario con acceso al panel de Filament
 # Hay que volver a ejecutarlo cada vez que se reinician las migraciones (migrate:fresh),
 # ya que ese comando borra también la tabla de usuarios
+
+# spatie permission
