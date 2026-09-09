@@ -1,0 +1,2 @@
+ php artisan make:filament-resource --generate --> Genera de forma automatica el recurso del modelo
+php artisan make:model Category -m --> Crea el modelo con su migracion
