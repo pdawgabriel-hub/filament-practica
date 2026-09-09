@@ -254,7 +254,7 @@ cd laradock
 docker compose up -d nginx mariadb php-fpm phpmyadmin workspace
 ```
 
-> ⚠️ No uses `docker compose restart` a secas: este proyecto convive con un contenedor `mysql` que compite por el puerto 3306 con `mariadb`. Reinicia siempre servicios concretos: `docker compose restart php-fpm nginx`.
+> No uses `docker compose restart` a secas: este proyecto convive con un contenedor `mysql` que compite por el puerto 3306 con `mariadb`. Reinicia siempre servicios concretos: `docker compose restart php-fpm nginx`.
 
 ### 4. Extensiones PHP necesarias en el contenedor `php-fpm`
 
