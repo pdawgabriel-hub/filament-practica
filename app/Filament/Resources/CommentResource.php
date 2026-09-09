@@ -23,9 +23,12 @@ class CommentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('autor_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('post_id')
+                    ->relationship('post', 'title')
+                    ->required(),
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
+                    ->required(),
                 Forms\Components\Textarea::make('body')
                     ->required()
                     ->columnSpanFull(),
@@ -36,8 +39,13 @@ class CommentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('autor_id')
+                Tables\Columns\TextColumn::make('post.title')
                     ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('body')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

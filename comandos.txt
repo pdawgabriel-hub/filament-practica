@@ -1,2 +1,4 @@
  php artisan make:filament-resource --generate --> Genera de forma automatica el recurso del modelo
 php artisan make:model Category -m --> Crea el modelo con su migracion
+php artisan make:filament-relation-manager PostResource comments body
+php artisan make:filament-user --> Cada vez que reiniciamos migraciones y bd
