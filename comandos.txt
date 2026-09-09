@@ -17,4 +17,7 @@ php artisan make:filament-user
 # ya que ese comando borra también la tabla de usuarios
 
 # spatie permission
-# cms?? Ques es?
+# para usar solo bd y bd y archivos en las copias de seguridad solo se puede usar con mysql
+# la app de healt solo funciona en produccion
+
+# trabajos sin hacer porque no hay

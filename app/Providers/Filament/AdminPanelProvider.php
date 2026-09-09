@@ -18,7 +18,10 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
-
+use Awcodes\Curator\CuratorPlugin;
+use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
+use ShuvroRoy\FilamentSpatieLaravelHealth\FilamentSpatieLaravelHealthPlugin;
+use Croustibat\FilamentJobsMonitor\FilamentJobsMonitorPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -53,6 +56,30 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+            ])
+            ->plugins([
+                CuratorPlugin::make()
+                    ->label('Media')
+                    ->pluralLabel('Media')
+                    ->navigationIcon('heroicon-o-photo')
+                    ->navigationGroup('Content')
+                    ->navigationSort(3)
+                    ->navigationCountBadge(true)
+                    ->registerNavigation(true),
+                FilamentJobsMonitorPlugin::make()
+                    ->enableNavigation(),
+            ])
+            ->plugin(FilamentSpatieLaravelBackupPlugin::make())
+            ->plugin(FilamentSpatieLaravelHealthPlugin::make())
+            ->plugins([
+                CuratorPlugin::make()
+                    ->label('Media')
+                    ->pluralLabel('Media')
+                    ->navigationIcon('heroicon-o-photo')
+                    ->navigationGroup('Content')
+                    ->navigationSort(3)
+                    ->navigationCountBadge(true)
+                    ->registerNavigation(true),
             ])
             //->plugin(FilamentSpatieRolesPermissionsPlugin::make())
             ->authMiddleware([
