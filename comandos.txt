@@ -17,3 +17,4 @@ php artisan make:filament-user
 # ya que ese comando borra también la tabla de usuarios
 
 # spatie permission
+# cms?? Ques es?
