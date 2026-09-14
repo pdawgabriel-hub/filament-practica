@@ -11,8 +11,10 @@ Proyecto de aprendizaje construido siguiendo un curso de YouTube sobre **Filamen
 - [Tecnologías utilizadas](#tecnologías-utilizadas)
 - [Paquetes instalados y para qué sirve cada uno](#paquetes-instalados-y-para-qué-sirve-cada-uno)
 - [Estructura del proyecto](#estructura-del-proyecto)
+- [Rutas públicas](#rutas-públicas)
 - [Modelos y relaciones](#modelos-y-relaciones)
 - [Autorización (Policies)](#autorización-policies)
+- [Roles y usuarios de acceso](#roles-y-usuarios-de-acceso)
 - [Cómo levantar el proyecto en local](#cómo-levantar-el-proyecto-en-local)
 - [Comandos útiles de Filament / Laravel](#comandos-útiles-de-filament--laravel)
 - [Notas y particularidades de esta instalación](#notas-y-particularidades-de-esta-instalación)
@@ -32,11 +34,17 @@ Qué se practica aquí:
 - Gestión de **roles y permisos** con Spatie Permission.
 - Gestión de **medios/imágenes** con un plugin dedicado.
 - Integración de plugins de terceros de la comunidad Filament (backups, monitorización de estado, monitor de colas, exportación a Excel).
-- Una capa pública mínima (Controller + Blade + Tailwind) para mostrar los posts gestionados desde el panel.
+- Una parte pública en Blade con tres secciones separadas, cada una con su propio controlador (patrón `index`/`show`):
+  - **Inicio** (`/`): landing con la descripción del proyecto y accesos rápidos a Noticias y Categorías.
+  - **Noticias** (`/posts`): listado completo de posts, con su vista de detalle (`/posts/{slug}`).
+  - **Categorías** (`/categories`): listado de categorías con nº de posts, y detalle de los posts de cada una (`/categories/{id}`).
+- **Componentes Blade** (`<x-nav>`, `<x-footer>`) reutilizados en las cinco vistas públicas, para no repetir el menú ni el pie en cada archivo.
 
 ---
 
 ## Capturas de pantalla
+
+> Todas las capturas incluyen la barra de dirección del navegador (con la URL visible) para que se vea claramente qué ruta corresponde a cada pantalla — recorta el resto de la ventana (VirtualBox, barra de marcadores) para que quede limpio.
 
 **Panel de administración — pantalla de acceso**
 
@@ -59,17 +67,54 @@ Qué se practica aquí:
   </tr>
 </table>
 
-**Parte pública del sitio**
+**Panel de administración — roles y permisos**
 
 <table>
   <tr>
     <td width="50%">
-      <img src="docs/screenshots/listado_publico_posts.png" alt="Listado público de noticias">
-      <p align="center"><sub>Listado público de noticias — <code>/</code></sub></p>
+      <img src="docs/screenshots/menu_admin.png" alt="Menú del panel con sesión de Admin">
+      <p align="center"><sub>Menú lateral con sesión de <strong>Admin</strong> — incluye Usuarios y Roles</sub></p>
     </td>
     <td width="50%">
-      <img src="docs/screenshots/post_publico.png" alt="Vista pública de un post individual">
-      <p align="center"><sub>Post individual con sus comentarios</sub></p>
+      <img src="docs/screenshots/menu_editor.png" alt="Menú del panel con sesión de Editor">
+      <p align="center"><sub>Menú lateral con sesión de <strong>Editor</strong> — sin Usuarios ni Roles</sub></p>
+    </td>
+  </tr>
+</table>
+
+**Parte pública — Inicio**
+
+<img src="docs/screenshots/home.png" alt="Landing pública del proyecto" width="700">
+<p align="center"><sub>Landing con la descripción del proyecto y accesos a Noticias/Categorías — <code>/</code></sub></p>
+
+<br>
+
+**Parte pública — Noticias**
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/posts_index.png" alt="Listado público de noticias">
+      <p align="center"><sub>Listado de posts — <code>/posts</code></sub></p>
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/post_show.png" alt="Vista pública de un post individual">
+      <p align="center"><sub>Post individual con sus comentarios — <code>/posts/{slug}</code></sub></p>
+    </td>
+  </tr>
+</table>
+
+**Parte pública — Categorías**
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/screenshots/categories_index.png" alt="Listado de categorías">
+      <p align="center"><sub>Listado de categorías con nº de posts — <code>/categories</code></sub></p>
+    </td>
+    <td width="50%">
+      <img src="docs/screenshots/categories_show.png" alt="Posts filtrados por categoría">
+      <p align="center"><sub>Posts de una categoría concreta — <code>/categories/{id}</code></sub></p>
     </td>
   </tr>
 </table>
@@ -127,7 +172,9 @@ Se documentan únicamente los directorios/archivos **generados manualmente** dur
 ```
 app/
 ├── Http/Controllers/
-│   └── HomeController.php          # Controlador de la parte pública (index = listado, view = post individual)
+│   ├── HomeController.php          # Landing pública ("/")
+│   ├── PostController.php          # Listado y detalle de posts ("/posts", "/posts/{slug}")
+│   └── CategoryController.php      # Listado y detalle de categorías ("/categories", "/categories/{id}")
 ├── Models/
 │   ├── Post.php                    # Modelo de noticias
 │   ├── Category.php                # Categoría de un post
@@ -147,18 +194,47 @@ app/
 │       └── RoleResource.php                          # CRUD de roles
 
 resources/views/
-├── home.blade.php                  # Listado público de posts (Tailwind, tarjetas)
-└── view.blade.php                  # Vista pública de un post individual + comentarios
+├── components/
+│   ├── nav.blade.php               # Menú de navegación, reutilizado en todas las páginas públicas
+│   └── footer.blade.php            # Pie de página, reutilizado en todas las páginas públicas
+├── home.blade.php                  # Landing pública
+├── posts/
+│   ├── index.blade.php             # Listado de posts
+│   └── show.blade.php              # Post individual + comentarios
+└── categories/
+    ├── index.blade.php             # Listado de categorías
+    └── show.blade.php              # Posts de una categoría concreta
 
-routes/web.php                      # Rutas públicas: "/" (listado) y "/{slug}" (post individual)
+routes/web.php                      # Rutas públicas: home, posts.index/show, categories.index/show
 
-database/migrations/
-├── ..._create_categories_table.php
-├── ..._create_posts_table.php
-└── ..._create_comments_table.php
+database/
+├── factories/
+│   ├── PostFactory.php
+│   ├── CategoryFactory.php
+│   └── CommentFactory.php
+├── seeders/
+│   └── DatabaseSeeder.php          # Crea roles, usuarios de prueba (admin/editor) y datos ficticios
+└── migrations/
+    ├── ..._create_categories_table.php
+    ├── ..._create_posts_table.php
+    └── ..._create_comments_table.php
 ```
 
 Las migraciones de `permission_tables`, `media_table`, `health_tables` y `filament-jobs-monitor_table` las genera cada paquete respectivo (`vendor:publish`) y no se han modificado a mano.
+
+---
+
+## Rutas públicas
+
+| Método | URI | Nombre | Controlador |
+|---|---|---|---|
+| GET | `/` | `home` | `HomeController@index` |
+| GET | `/posts` | `posts.index` | `PostController@index` |
+| GET | `/posts/{post:slug}` | `posts.show` | `PostController@show` |
+| GET | `/categories` | `categories.index` | `CategoryController@index` |
+| GET | `/categories/{category}` | `categories.show` | `CategoryController@show` |
+
+`/posts/{post:slug}` usa **Route Model Binding** por la columna `slug` en vez del `id` por defecto — la resolución del modelo la hace la ruta, no el controlador.
 
 ---
 
@@ -222,6 +298,34 @@ En este proyecto hay dos:
 Filament respeta estas Policies automáticamente: si un usuario sin el rol `Admin` intenta entrar a `/dashboard/users` o `/dashboard/roles`, el Resource correspondiente ni siquiera se muestra en el menú.
 
 > **Nota de aprendizaje**: el nombre de la clase debe coincidir exactamente con el patrón `NombreDelModelo` + `Policy` para que Laravel la detecte sola. Un simple error de tipeo en el nombre de la clase (por ejemplo `USerPolicy` en vez de `UserPolicy`) hace que Laravel no la reconozca y la ignore silenciosamente, sin lanzar ningún error — el fallo es puramente de convención de nombre, no de sintaxis.
+
+---
+
+## Roles y usuarios de acceso
+
+El `DatabaseSeeder` crea dos roles (vía `spatie/laravel-permission`) y un usuario de ejemplo para cada uno.
+
+| Rol | Qué puede hacer | Qué NO puede hacer |
+|---|---|---|
+| **Admin** | Todo: gestionar Posts, Categorías, Comentarios, y además **Usuarios** y **Roles** | — |
+| **Editor** | Gestionar Posts, Categorías y Comentarios (no hay Policy que lo restrinja ahí, así que Filament lo permite por defecto) | Entrar a los Resources de **Usuarios** y **Roles** — `UserPolicy` y `RolePolicy` exigen el rol `Admin`, así que esos dos elementos del menú ni siquiera aparecen para un Editor |
+
+Es decir: la diferencia entre ambos roles en este proyecto se reduce exactamente a lo que cubren `UserPolicy` y `RolePolicy` — como no existe ninguna Policy para `Post`, `Category` ni `Comment`, un Editor tiene acceso completo a esos tres Resources igual que un Admin.
+
+### Usuarios de prueba (creados por el seeder)
+
+| Rol | Email | Contraseña |
+|---|---|---|
+| Admin | `admin@example.com` | `admin` |
+| Editor | `editor@example.com` | `editor` |
+
+También existe un tercer usuario, `test@example.com` (contraseña generada por la factory, sin rol asignado), útil para comprobar qué ve alguien **sin ningún rol**: no vería ni Usuarios ni Roles en el menú, igual que un Editor.
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+recrea estos tres usuarios desde cero cada vez.
 
 ---
 
@@ -364,6 +468,11 @@ php artisan make:filament-user
 # Crea un usuario con acceso al panel de Filament.
 # Hay que volver a ejecutarlo cada vez que se reinician las migraciones (migrate:fresh),
 # ya que ese comando borra también la tabla de usuarios.
+
+php artisan migrate:fresh --seed
+# Recrea todas las tablas y las puebla con datos de ejemplo (roles, usuarios admin/editor,
+# posts, categorías y comentarios ficticios) usando las factories y el DatabaseSeeder.
+# Ya no hace falta ejecutar make:filament-user aparte: el seeder crea admin@example.com / admin.
 ```
 
 ---
@@ -375,3 +484,5 @@ php artisan make:filament-user
 - **PHP y Composer**: el host (VM) y el contenedor `php-fpm` deben tener la **misma versión de PHP** — un desajuste entre ambos (por ejemplo tras reconstruir la imagen) provoca errores de Composer del tipo "Your Composer dependencies require a PHP version...".
 - **Registro duplicado de plugin**: en `app/Providers/Filament/AdminPanelProvider.php`, el bloque `->plugins([ CuratorPlugin::make()... ])` aparece registrado dos veces (una vez junto a `FilamentJobsMonitorPlugin`, y otra vez suelto más abajo). Es redundante pero no rompe nada — Filament simplemente reinstancia el mismo plugin dos veces. Queda como nota de aprendizaje: al ir añadiendo plugins en distintos momentos del curso, es fácil duplicar un bloque en vez de añadir la nueva entrada al array ya existente. Pendiente de limpieza.
 - **Trabajos en cola sin implementar**: no hay ningún Job en background creado todavía, así que `croustibat/filament-jobs-monitor` está instalado pero sin nada real que monitorizar (`/dashboard/queue-monitors` aparecerá vacío hasta que se despache algún Job).
+- **Vista huérfana `resources/views/view.blade.php`**: es la vista de detalle de post de antes de separar la parte pública en `home` / `posts` / `categories`. Ninguna ruta ni controlador la referencia ya (la sustituyó `posts/show.blade.php`) — sigue en el repo pero no se usa. Pendiente de borrar.
+- **Categorías generadas por el `PostFactory`**: como cada post del seeder crea su propia categoría con `Category::factory()` en vez de reutilizar un conjunto fijo, cada `migrate:fresh --seed` genera hasta 20 categorías distintas (una por post) en lugar de un puñado de categorías compartidas entre varios posts. Es intencionado para el ejercicio, pero si se quiere un catálogo de categorías más realista habría que crearlas antes en el seeder y asignarlas con `Category::inRandomOrder()->first()`.
