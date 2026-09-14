@@ -49,7 +49,7 @@
                         <div class="h-48 overflow-hidden">
                             <a href="/{{ $post->slug }}">
                                 <img
-                                    src="{{ asset('storage/' . $post->imagen_url) }}"
+                                    src="{{ str_starts_with($post->imagen_url, 'http') ? $post->imagen_url : asset('storage/' . $post->imagen_url) }}"
                                     alt="{{ $post->title }}"
                                     class="w-full h-full object-cover hover:scale-105 transition duration-300"
                                 >
